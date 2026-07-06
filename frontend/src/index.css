@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8CB89B transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #EFEDE3;
+  color: #1B2B22;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #B98B3E;
+  outline-offset: 2px;
+}
+
+.ledger-card {
+  background: #FBFAF5;
+  border: 1px solid rgba(27, 43, 34, 0.1);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
