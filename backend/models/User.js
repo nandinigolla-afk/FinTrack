@@ -21,6 +21,8 @@ const userSchema = new mongoose.Schema(
     role: { type: String, enum: ["user", "admin"], default: "user" },
     financialGoals: { type: String, default: "" },
     monthlyIncomeTarget: { type: Number, default: 0 },
+    riskPreference: { type: String, enum: ["Conservative", "Moderate", "Aggressive"], default: "Moderate" },
+    investmentHorizonYears: { type: Number, default: 5 },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }

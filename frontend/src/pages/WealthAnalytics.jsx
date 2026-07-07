@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { Landmark, Coins, TrendingUp, PercentCircle } from "lucide-react";
 import Layout from "../components/Layout";
 import StatCard from "../components/StatCard";
 import api from "../api/axios";
@@ -60,10 +61,10 @@ const WealthAnalytics = () => {
       ) : (
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard label="Net Worth" value={summary?.netWorth || 0} isCurrency accent="moss" index={0} />
-            <StatCard label="Total Invested" value={summary?.totalInvested || 0} isCurrency accent="gold" index={1} />
-            <StatCard label="Current Value" value={summary?.totalInvestmentValue || 0} isCurrency accent="gold" index={2} />
-            <StatCard label="Growth %" value={summary?.investmentGrowthPercent || 0} prefix="" accent="moss" index={3} />
+            <StatCard label="Net Worth" value={summary?.netWorth || 0} isCurrency accent="moss" index={0} Icon={Landmark} />
+            <StatCard label="Total Invested" value={summary?.totalInvested || 0} isCurrency accent="gold" index={1} Icon={Coins} />
+            <StatCard label="Current Value" value={summary?.totalInvestmentValue || 0} isCurrency accent="gold" index={2} Icon={TrendingUp} />
+            <StatCard label="Growth %" value={summary?.investmentGrowthPercent || 0} prefix="" accent="moss" index={3} Icon={PercentCircle} />
           </div>
 
           <div className="ledger-card rounded-lg p-5 shadow-ledger">

@@ -1,13 +1,15 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import { LayoutDashboard, Receipt, Flame, PiggyBank, LineChart, Sparkles, ShieldAlert } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const links = [
-  { to: "/dashboard", label: "Dashboard", glyph: "01" },
-  { to: "/expenses", label: "Expense Tracker", glyph: "02" },
-  { to: "/habits", label: "Habit Tracker", glyph: "03" },
-  { to: "/goals", label: "Savings Goals", glyph: "04" },
-  { to: "/wealth", label: "Wealth Analytics", glyph: "05" },
+  { to: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { to: "/expenses", label: "Expense Tracker", Icon: Receipt },
+  { to: "/habits", label: "Habit Tracker", Icon: Flame },
+  { to: "/goals", label: "Savings Goals", Icon: PiggyBank },
+  { to: "/wealth", label: "Wealth Analytics", Icon: LineChart },
+  { to: "/investment-advisor", label: "Investment Advisor", Icon: Sparkles },
 ];
 
 const Sidebar = () => {
@@ -24,6 +26,7 @@ const Sidebar = () => {
       <nav className="flex flex-col gap-1">
         {links.map((link) => {
           const active = location.pathname === link.to;
+          const Icon = link.Icon;
           return (
             <NavLink
               key={link.to}
@@ -37,13 +40,15 @@ const Sidebar = () => {
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
                 />
               )}
-              <span
-                className={`relative z-10 font-mono text-xs ${
+              <motion.span
+                animate={active ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className={`relative z-10 ${
                   active ? "text-gold-400" : "text-moss-300 group-hover:text-gold-400"
                 } transition-colors`}
               >
-                {link.glyph}
-              </span>
+                <Icon size={17} strokeWidth={2} />
+              </motion.span>
               <span className={`relative z-10 text-sm ${active ? "text-linen" : "text-moss-100 group-hover:text-linen"}`}>
                 {link.label}
               </span>
@@ -60,8 +65,8 @@ const Sidebar = () => {
                 transition={{ type: "spring", stiffness: 400, damping: 32 }}
               />
             )}
-            <span className={`relative z-10 font-mono text-xs ${location.pathname === "/admin" ? "text-linen" : "text-rust-400"}`}>
-              ⚑
+            <span className={`relative z-10 ${location.pathname === "/admin" ? "text-linen" : "text-rust-400"}`}>
+              <ShieldAlert size={17} strokeWidth={2} />
             </span>
             <span className={`relative z-10 text-sm ${location.pathname === "/admin" ? "text-linen" : "text-rust-400"}`}>
               Admin Panel

@@ -9,6 +9,7 @@ const mobileLinks = [
   { to: "/habits", label: "Habits" },
   { to: "/goals", label: "Goals" },
   { to: "/wealth", label: "Wealth" },
+  { to: "/investment-advisor", label: "Investment Advisor" },
 ];
 
 const Navbar = ({ title, subtitle }) => {

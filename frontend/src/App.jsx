@@ -8,6 +8,7 @@ import ExpenseTracker from "./pages/ExpenseTracker";
 import HabitTracker from "./pages/HabitTracker";
 import SavingsGoals from "./pages/SavingsGoals";
 import WealthAnalytics from "./pages/WealthAnalytics";
+import InvestmentAdvisor from "./pages/InvestmentAdvisor";
 import AdminPanel from "./pages/AdminPanel";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -57,6 +58,14 @@ function App() {
           element={
             <ProtectedRoute>
               <WealthAnalytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/investment-advisor"
+          element={
+            <ProtectedRoute>
+              <InvestmentAdvisor />
             </ProtectedRoute>
           }
         />

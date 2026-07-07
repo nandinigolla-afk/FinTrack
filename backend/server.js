@@ -9,6 +9,7 @@ const incomeRoutes = require("./routes/incomeRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const habitRoutes = require("./routes/habitRoutes");
 const goalRoutes = require("./routes/goalRoutes");
+const marketRoutes = require("./routes/marketRoutes");
 const investmentRoutes = require("./routes/investmentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 

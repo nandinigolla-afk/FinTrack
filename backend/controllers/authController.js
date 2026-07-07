@@ -77,12 +77,14 @@ const getProfile = async (req, res) => {
 // @route PUT /api/auth/me
 const updateProfile = async (req, res) => {
   try {
-    const { name, financialGoals, monthlyIncomeTarget } = req.body;
+    const { name, financialGoals, monthlyIncomeTarget, riskPreference, investmentHorizonYears } = req.body;
     const user = await User.findById(req.user._id);
 
     if (name !== undefined) user.name = name;
     if (financialGoals !== undefined) user.financialGoals = financialGoals;
     if (monthlyIncomeTarget !== undefined) user.monthlyIncomeTarget = monthlyIncomeTarget;
+    if (riskPreference !== undefined) user.riskPreference = riskPreference;
+    if (investmentHorizonYears !== undefined) user.investmentHorizonYears = investmentHorizonYears;
 
     await user.save();
     res.json({ success: true, data: user });

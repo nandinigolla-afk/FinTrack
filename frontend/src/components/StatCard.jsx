@@ -33,7 +33,7 @@ const AnimatedNumber = ({ value, prefix = "", isCurrency = false }) => {
   );
 };
 
-const StatCard = ({ label, value, isCurrency = false, prefix = "", accent = "moss", index = 0 }) => {
+const StatCard = ({ label, value, isCurrency = false, prefix = "", accent = "moss", index = 0, Icon }) => {
   const accentMap = {
     moss: "text-moss-600 bg-moss-50",
     gold: "text-gold-600 bg-gold-400/10",
@@ -48,7 +48,20 @@ const StatCard = ({ label, value, isCurrency = false, prefix = "", accent = "mos
       whileHover={{ y: -3 }}
       className="ledger-card rounded-lg p-5 shadow-ledger"
     >
-      <p className="text-xs uppercase tracking-wide text-slate-500 font-medium mb-2">{label}</p>
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-xs uppercase tracking-wide text-slate-500 font-medium">{label}</p>
+        {Icon && (
+          // Coin-flip entrance: rotates in on its Y axis like a spinning coin settling flat.
+          <motion.span
+            initial={{ rotateY: 180, opacity: 0 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: index * 0.06 + 0.15, ease: "easeOut" }}
+            className={`${accentMap[accent]?.split(" ")[0] || "text-ink"} opacity-70`}
+          >
+            <Icon size={16} strokeWidth={2} />
+          </motion.span>
+        )}
+      </div>
       <p className={`font-display text-2xl md:text-3xl ${accentMap[accent]?.split(" ")[0] || "text-ink"}`}>
         <AnimatedNumber value={value} isCurrency={isCurrency} prefix={prefix} />
       </p>

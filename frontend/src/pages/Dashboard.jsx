@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { Link } from "react-router-dom";
+import { Landmark, Wallet, PiggyBank, TrendingUp } from "lucide-react";
 import Layout from "../components/Layout";
 import StatCard from "../components/StatCard";
 import StampButton from "../components/StampButton";
@@ -72,10 +73,10 @@ const Dashboard = () => {
       ) : (
         <div className="space-y-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard label="Net Worth" value={summary?.netWorth || 0} isCurrency index={0} accent="moss" />
-            <StatCard label="Cash On Hand" value={summary?.cashOnHand || 0} isCurrency index={1} accent="moss" />
-            <StatCard label="Total Savings" value={summary?.totalSavings || 0} isCurrency index={2} accent="gold" />
-            <StatCard label="Investment Value" value={summary?.totalInvestmentValue || 0} isCurrency index={3} accent="gold" />
+            <StatCard label="Net Worth" value={summary?.netWorth || 0} isCurrency index={0} accent="moss" Icon={Landmark} />
+            <StatCard label="Cash On Hand" value={summary?.cashOnHand || 0} isCurrency index={1} accent="moss" Icon={Wallet} />
+            <StatCard label="Total Savings" value={summary?.totalSavings || 0} isCurrency index={2} accent="gold" Icon={PiggyBank} />
+            <StatCard label="Investment Value" value={summary?.totalInvestmentValue || 0} isCurrency index={3} accent="gold" Icon={TrendingUp} />
           </div>
 
           <div className="grid lg:grid-cols-3 gap-6">

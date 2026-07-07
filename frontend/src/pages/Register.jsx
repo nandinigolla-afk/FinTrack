@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
+import FloatingCurrency from "../components/FloatingCurrency";
 
 const Register = () => {
   const { register } = useAuth();
@@ -25,12 +26,13 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-ink px-5 py-10">
+    <div className="relative min-h-screen flex items-center justify-center bg-ink px-5 py-10 overflow-hidden">
+      <FloatingCurrency />
       <motion.div
         initial={{ opacity: 0, y: 24, rotateX: -8 }}
         animate={{ opacity: 1, y: 0, rotateX: 0 }}
         transition={{ duration: 0.55, ease: "easeOut" }}
-        className="w-full max-w-md"
+        className="relative w-full max-w-md"
       >
         <div className="bg-linen rounded-lg shadow-2xl p-8 border border-moss-700/30">
           <div className="text-center mb-8">
