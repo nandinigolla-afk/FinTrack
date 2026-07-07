@@ -20,15 +20,15 @@ const FloatingCurrency = ({ count = 14 }) => {
       {items.map((item) => (
         <motion.span
           key={item.key}
-          initial={{ y: "110%", opacity: 0 }}
-          animate={{ y: "-20%", opacity: [0, 0.5, 0.5, 0] }}
+          initial={{ y: "0vh", opacity: 0 }}
+          animate={{ y: "-130vh", opacity: [0, 0.5, 0.5, 0] }}
           transition={{
             duration: item.duration,
             delay: item.delay,
             repeat: Infinity,
             ease: "linear",
           }}
-          style={{ left: `${item.left}%`, fontSize: item.size }}
+          style={{ left: `${item.left}%`, bottom: 0, fontSize: item.size }}
           className="absolute font-display text-moss-300/40 select-none"
         >
           {item.symbol}
