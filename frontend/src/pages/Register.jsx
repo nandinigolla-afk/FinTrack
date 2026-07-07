@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import FloatingCurrency from "../components/FloatingCurrency";
+import PasswordInput from "../components/PasswordInput";
 
 const Register = () => {
   const { register } = useAuth();
@@ -76,13 +77,10 @@ const Register = () => {
             </div>
             <div>
               <label className="text-xs uppercase tracking-wide text-slate-500 font-medium">Password</label>
-              <input
-                type="password"
-                required
-                minLength={6}
+              <PasswordInput
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="mt-1 w-full rounded-md border border-ink/15 bg-white px-3 py-2.5 text-ink focus-ring focus:border-moss-500 outline-none"
+                minLength={6}
                 placeholder="At least 6 characters"
               />
             </div>
