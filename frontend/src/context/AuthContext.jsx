@@ -34,6 +34,15 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // When any API call comes back 401 (expired/invalid token), the axios
+  // interceptor clears storage and fires this event. Clearing user state here
+  // lets ProtectedRoute redirect client-side via React Router — no hard reload.
+  useEffect(() => {
+    const handleUnauthorized = () => setUser(null);
+    window.addEventListener("fintrack:unauthorized", handleUnauthorized);
+    return () => window.removeEventListener("fintrack:unauthorized", handleUnauthorized);
+  }, []);
+
   return (
     <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
