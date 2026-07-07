@@ -8,7 +8,7 @@ const PasswordInput = ({ value, onChange, placeholder = "•••••••�
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative mt-1">
       <input
         type={visible ? "text" : "password"}
         required={required}
@@ -16,14 +16,14 @@ const PasswordInput = ({ value, onChange, placeholder = "•••••••�
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="mt-1 w-full rounded-md border border-ink/15 bg-white pl-3 pr-11 py-2.5 text-ink focus-ring focus:border-moss-500 outline-none"
+        className="w-full rounded-md border border-ink/15 bg-white pl-3 pr-11 py-2.5 text-ink focus-ring focus:border-moss-500 outline-none"
       />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? "Hide password" : "Show password"}
         title={visible ? "Hide password" : "Show password"}
-        className="absolute right-2.5 top-1/2 translate-y-[calc(50%+1px)] text-slate-400 hover:text-gold-600 transition-colors focus-ring rounded p-0.5"
+        className="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-gold-600 transition-colors focus-ring rounded"
       >
         <AnimatePresence mode="wait" initial={false}>
           {visible ? (
