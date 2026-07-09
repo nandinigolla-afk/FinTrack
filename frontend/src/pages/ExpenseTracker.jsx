@@ -17,18 +17,25 @@ const ExpenseTracker = () => {
   const [expForm, setExpForm] = useState({ category: "Food", amount: "", date: new Date().toISOString().slice(0, 10), description: "" });
   const [incForm, setIncForm] = useState({ source: "", amount: "", date: new Date().toISOString().slice(0, 10), notes: "" });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   const loadData = async () => {
     setLoading(true);
-    const [expRes, incRes, sumRes] = await Promise.all([
-      api.get("/expenses"),
-      api.get("/incomes"),
-      api.get("/expenses/summary"),
-    ]);
-    setExpenses(expRes.data.data);
-    setIncomes(incRes.data.data);
-    setSummary(sumRes.data.data);
-    setLoading(false);
+    setLoadError("");
+    try {
+      const [expRes, incRes, sumRes] = await Promise.all([
+        api.get("/expenses"),
+        api.get("/incomes"),
+        api.get("/expenses/summary"),
+      ]);
+      setExpenses(expRes.data.data);
+      setIncomes(incRes.data.data);
+      setSummary(sumRes.data.data);
+    } catch (err) {
+      setLoadError(err.response?.data?.message || "Could not load your expense data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -67,6 +74,14 @@ const ExpenseTracker = () => {
 
   return (
     <Layout title="Expense & Income Tracker" subtitle="Log every rupee in and out">
+      {loadError && (
+        <div className="flex items-center justify-between gap-3 bg-rust-500/10 border border-rust-500/30 rounded-lg px-4 py-3 mb-6">
+          <p className="text-sm text-rust-600">{loadError}</p>
+          <button onClick={loadData} className="text-xs font-medium text-rust-600 underline shrink-0">
+            Retry
+          </button>
+        </div>
+      )}
       <div className="flex gap-2 mb-6">
         {["expense", "income"].map((t) => (
           <button

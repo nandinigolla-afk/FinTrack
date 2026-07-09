@@ -10,13 +10,20 @@ const AdminPanel = () => {
   const [analytics, setAnalytics] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   const loadData = async () => {
     setLoading(true);
-    const [analyticsRes, usersRes] = await Promise.all([api.get("/admin/analytics"), api.get("/admin/users")]);
-    setAnalytics(analyticsRes.data.data);
-    setUsers(usersRes.data.data);
-    setLoading(false);
+    setLoadError("");
+    try {
+      const [analyticsRes, usersRes] = await Promise.all([api.get("/admin/analytics"), api.get("/admin/users")]);
+      setAnalytics(analyticsRes.data.data);
+      setUsers(usersRes.data.data);
+    } catch (err) {
+      setLoadError(err.response?.data?.message || "Could not load platform data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -36,6 +43,12 @@ const AdminPanel = () => {
 
   return (
     <Layout title="Admin Panel" subtitle="Platform-wide usage and user management">
+      {loadError && (
+        <div className="flex items-center justify-between gap-3 bg-rust-500/10 border border-rust-500/30 rounded-lg px-4 py-3 mb-6">
+          <p className="text-sm text-rust-600">{loadError}</p>
+          <button onClick={loadData} className="text-xs font-medium text-rust-600 underline shrink-0">Retry</button>
+        </div>
+      )}
       {loading ? (
         <p className="text-slate-500">Loading platform data…</p>
       ) : (

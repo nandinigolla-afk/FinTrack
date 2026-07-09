@@ -12,12 +12,19 @@ const SavingsGoals = () => {
   const [form, setForm] = useState({ title: "", targetAmount: "", targetDate: "", category: "Other" });
   const [contributions, setContributions] = useState({});
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   const loadGoals = async () => {
     setLoading(true);
-    const { data } = await api.get("/goals");
-    setGoals(data.data);
-    setLoading(false);
+    setLoadError("");
+    try {
+      const { data } = await api.get("/goals");
+      setGoals(data.data);
+    } catch (err) {
+      setLoadError(err.response?.data?.message || "Could not load your savings goals. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -47,6 +54,12 @@ const SavingsGoals = () => {
 
   return (
     <Layout title="Savings Goals" subtitle="Give every rupee saved a purpose">
+      {loadError && (
+        <div className="flex items-center justify-between gap-3 bg-rust-500/10 border border-rust-500/30 rounded-lg px-4 py-3 mb-6">
+          <p className="text-sm text-rust-600">{loadError}</p>
+          <button onClick={loadGoals} className="text-xs font-medium text-rust-600 underline shrink-0">Retry</button>
+        </div>
+      )}
       <div className="ledger-card rounded-lg p-5 shadow-ledger mb-6">
         <form onSubmit={submitGoal} className="grid sm:grid-cols-5 gap-3">
           <input

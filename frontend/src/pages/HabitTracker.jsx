@@ -16,9 +16,15 @@ const HabitTracker = () => {
 
   const loadHabits = async () => {
     setLoading(true);
-    const { data } = await api.get("/habits");
-    setHabits(data.data);
-    setLoading(false);
+    setError("");
+    try {
+      const { data } = await api.get("/habits");
+      setHabits(data.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not load your habits. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -75,7 +81,12 @@ const HabitTracker = () => {
         </form>
       </div>
 
-      {error && <p className="text-sm text-rust-500 bg-rust-500/10 rounded-md px-3 py-2 mb-4 inline-block">{error}</p>}
+      {error && (
+        <div className="flex items-center justify-between gap-3 text-sm text-rust-500 bg-rust-500/10 rounded-md px-3 py-2 mb-4">
+          <span>{error}</span>
+          <button onClick={loadHabits} className="text-xs font-medium underline shrink-0">Retry</button>
+        </div>
+      )}
 
       {loading ? (
         <p className="text-slate-500">Loading habits…</p>

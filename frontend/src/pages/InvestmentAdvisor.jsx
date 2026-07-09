@@ -20,19 +20,30 @@ const InvestmentAdvisor = () => {
   const [savedPlanIds, setSavedPlanIds] = useState([]);
   const [riskPreference, setRiskPreference] = useState(user?.riskPreference || "Moderate");
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   const loadData = async () => {
     setLoading(true);
-    const [advisorRes, wealthRes, historyRes] = await Promise.all([
-      api.get("/investments/recommendations"),
-      api.get("/investments/wealth-summary"),
-      api.get("/investments/history"),
-    ]);
-    setAdvisorData(advisorRes.data.data);
-    setWealthSummary(wealthRes.data.data);
-    setSavedPlanIds(historyRes.data.data.savedPlans.map((p) => p.instrumentId));
-    setRiskPreference(advisorRes.data.data.snapshot.riskPreference);
-    setLoading(false);
+    setLoadError("");
+    try {
+      const [advisorRes, wealthRes, historyRes] = await Promise.all([
+        api.get("/investments/recommendations"),
+        api.get("/investments/wealth-summary"),
+        api.get("/investments/history"),
+      ]);
+      setAdvisorData(advisorRes.data.data);
+      setWealthSummary(wealthRes.data.data);
+      setSavedPlanIds(historyRes.data.data.savedPlans.map((p) => p.instrumentId));
+      setRiskPreference(advisorRes.data.data.snapshot.riskPreference);
+    } catch (err) {
+      setLoadError(
+        err.response?.status === 404
+          ? "The Investment Advisor backend routes aren't deployed yet on this server."
+          : err.response?.data?.message || "Could not load your investment advisor data. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -41,28 +52,45 @@ const InvestmentAdvisor = () => {
   }, []);
 
   const handleRiskChange = async (level) => {
+    const previous = riskPreference;
     setRiskPreference(level);
-    await api.put("/auth/me", { riskPreference: level });
-    const advisorRes = await api.get("/investments/recommendations");
-    setAdvisorData(advisorRes.data.data);
+    try {
+      await api.put("/auth/me", { riskPreference: level });
+      const advisorRes = await api.get("/investments/recommendations");
+      setAdvisorData(advisorRes.data.data);
+    } catch (err) {
+      setRiskPreference(previous);
+      setLoadError(err.response?.data?.message || "Could not update risk preference. Please try again.");
+    }
   };
 
   const handleSavePlan = async (rec) => {
-    await api.post("/investments/save-plan", {
-      instrumentId: rec.id,
-      instrumentName: rec.name,
-      suitabilityScore: rec.suitabilityScore,
-    });
-    setSavedPlanIds((prev) => [...prev, rec.id]);
+    try {
+      await api.post("/investments/save-plan", {
+        instrumentId: rec.id,
+        instrumentName: rec.name,
+        suitabilityScore: rec.suitabilityScore,
+      });
+      setSavedPlanIds((prev) => [...prev, rec.id]);
+    } catch (err) {
+      setLoadError(err.response?.data?.message || "Could not save this plan. Please try again.");
+    }
   };
 
   return (
     <Layout title="Smart Investment Advisor" subtitle="Personalized, education-first guidance based on your own numbers">
       <DisclaimerBanner />
 
+      {loadError && (
+        <div className="flex items-center justify-between gap-3 bg-rust-500/10 border border-rust-500/30 rounded-lg px-4 py-3 mb-6">
+          <p className="text-sm text-rust-600">{loadError}</p>
+          <button onClick={loadData} className="text-xs font-medium text-rust-600 underline shrink-0">Retry</button>
+        </div>
+      )}
+
       {loading ? (
         <p className="text-slate-500">Analyzing your financial profile…</p>
-      ) : (
+      ) : !advisorData ? null : (
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Monthly Disposable Income" value={advisorData.snapshot.monthlyDisposableIncome} isCurrency accent="moss" index={0} Icon={Wallet} />

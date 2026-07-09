@@ -14,13 +14,20 @@ const WealthAnalytics = () => {
   const [investments, setInvestments] = useState([]);
   const [form, setForm] = useState({ name: "", type: "Stocks", amountInvested: "", currentValue: "" });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   const loadData = async () => {
     setLoading(true);
-    const [sumRes, invRes] = await Promise.all([api.get("/investments/wealth-summary"), api.get("/investments")]);
-    setSummary(sumRes.data.data);
-    setInvestments(invRes.data.data);
-    setLoading(false);
+    setLoadError("");
+    try {
+      const [sumRes, invRes] = await Promise.all([api.get("/investments/wealth-summary"), api.get("/investments")]);
+      setSummary(sumRes.data.data);
+      setInvestments(invRes.data.data);
+    } catch (err) {
+      setLoadError(err.response?.data?.message || "Could not load your wealth data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -56,9 +63,15 @@ const WealthAnalytics = () => {
 
   return (
     <Layout title="Wealth Analytics" subtitle="Watch your net worth compound over time">
+      {loadError && (
+        <div className="flex items-center justify-between gap-3 bg-rust-500/10 border border-rust-500/30 rounded-lg px-4 py-3 mb-6">
+          <p className="text-sm text-rust-600">{loadError}</p>
+          <button onClick={loadData} className="text-xs font-medium text-rust-600 underline shrink-0">Retry</button>
+        </div>
+      )}
       {loading ? (
         <p className="text-slate-500">Crunching the numbers…</p>
-      ) : (
+      ) : loadError ? null : (
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Net Worth" value={summary?.netWorth || 0} isCurrency accent="moss" index={0} Icon={Landmark} />
